@@ -11,6 +11,6 @@ app.use('*', cors({
 }))
 
 app.get('/', (c) => {
-  return c.json({ message: 'Hono MSG' })
+  return c.json({ message: 'HELLO WORLD' ,FROM:'from Hono on Cloudflare Workers!'})
 })
 export default app
