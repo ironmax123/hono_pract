@@ -1,6 +1,11 @@
 name = "rough-scene-655a"
 main = "src/index.ts"
 compatibility_date = "2025-01-27"
+workers_dev = true
+
+
+[dev]
+port = 8787
 
 # compatibility_flags = [ "nodejs_compat" ]
 
