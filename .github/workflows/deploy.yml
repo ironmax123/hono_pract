@@ -9,6 +9,8 @@ jobs:
     name: Deploy
     steps:
       - uses: actions/checkout@v3
+      - name: actions
+        run: wrangler publish --verbose
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
