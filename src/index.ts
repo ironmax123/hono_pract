@@ -30,13 +30,13 @@ async function fetchUsers() {
   try {
     const { data, error } = await supabase
       .from('users')
-      .select('name')
+      .select('names')
     if (error) {
       throw error;
     }
     if (data) {
-      setUsers(data.map(user => user.name)) // useStateにデータを保存する
-      return data.map(user => user.name);
+      setUsers(data.map(user => user.names)) // useStateにデータを保存する
+      return data.map(user => user.names);
     }
     return [];
   } catch (error) {
