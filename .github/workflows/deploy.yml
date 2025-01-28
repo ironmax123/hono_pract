@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy
     steps:
-      - uses: actions/checkout@v3
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
