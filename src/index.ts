@@ -21,6 +21,7 @@ app.get('/msg', (c) => {
 })
 app.get('/db', async (c) => {
   const datas = await fetchUsers();
+  console.log(datas);
   return c.json({ name: datas });
 })
 
