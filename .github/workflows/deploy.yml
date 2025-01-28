@@ -9,6 +9,8 @@ jobs:
     name: Deploy
     steps:
       - uses: actions/checkout@v3
+      - name: Install Wrangler
+        run: npm install -g wrangler
       - name: actions
         run: wrangler publish --verbose
       - name: Deploy
