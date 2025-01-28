@@ -16,6 +16,9 @@ app.use('*', cors({
 app.get('/', (c) => {
   return c.json({ message: 'HELLO WORLD' ,FROM:'from Hono on Cloudflare Workers!'})
 })
+app.get('/msg', (c) => {
+  return c.json({ message: 'Hono!' ,FROM:'Cloudflare'})
+})
 app.get('/db', async (c) => {
   const datas = await fetchUsers();
   return c.json({ name: datas });
@@ -24,12 +27,20 @@ app.get('/db', async (c) => {
 export default app
 
 async function fetchUsers() {
-  const { data } = await supabase
-    .from('users')
-    .select('name')
-  if (data) {
-    setUsers(data.map(user => user.name)) // useStateにデータを保存する
-    return data.map(user => user.name);
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('name')
+    if (error) {
+      throw error;
+    }
+    if (data) {
+      setUsers(data.map(user => user.name)) // useStateにデータを保存する
+      return data.map(user => user.name);
+    }
+    return [];
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
   }
-  return [];
 }
