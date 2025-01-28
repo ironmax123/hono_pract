@@ -1,6 +1,6 @@
+import { createClient } from '@supabase/supabase-js';
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
-import { supabase } from "./db_connect";
 import { useState } from 'hono/jsx';
 
 const app = new Hono()
@@ -27,6 +27,7 @@ app.get('/db', async (c) => {
 export default app
 
 async function fetchUsers() {
+  const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
   try {
     const { data, error } = await supabase
       .from('users')
