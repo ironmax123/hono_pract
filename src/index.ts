@@ -24,29 +24,31 @@ app.get('/msg', (c) => {
 app.get('/db', async (c) => {
   const SUPABASE_URL = (c.env as { SUPABASE_URL: string }).SUPABASE_URL;
   const SUPABASE_API_KEY = (c.env as { SUPABASE_API_KEY: string }).SUPABASE_API_KEY;
-  const datas = await fetchUsers(SUPABASE_URL,SUPABASE_API_KEY);
-  console.log(datas);
+  const datas = await fetchUserNames(SUPABASE_URL,SUPABASE_API_KEY);
+  
   
   return c.json({ users: datas});
 })
 
 export default app
 
-async function fetchUsers(SUPABASE_URL: string, SUPABASE_API_KEY: string) {
+
+async function fetchUserNames(SUPABASE_URL: string, SUPABASE_API_KEY: string){
   const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
+  
   try {
     const { data, error } = await supabase
       .from('users')
-      .select('*')
+      .select('names');
+
     if (error) {
+      console.error('Supabase error:', error);
       throw error;
     }
-    if (data) {
-      return data;
-    }
-    return [];
+
+    return data.map(user => user.names);
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error('Error fetching user names:', error);
     return [];
   }
 }
