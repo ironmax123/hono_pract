@@ -21,7 +21,7 @@ app.get('/', (c) => {
 app.get('/msg', (c) => {
   return c.json({ message: 'Hono!' ,FROM:'Cloudflare'})
 })
-app.get('/db', async (c) => {
+app.get('/db/read', async (c) => {
   const SUPABASE_URL = (c.env as { SUPABASE_URL: string }).SUPABASE_URL;
   const SUPABASE_API_KEY = (c.env as { SUPABASE_API_KEY: string }).SUPABASE_API_KEY;
   const datas = await fetchUserNames(SUPABASE_URL,SUPABASE_API_KEY);
@@ -30,6 +30,16 @@ app.get('/db', async (c) => {
   return c.json({ users: datas});
 })
 
+app.get('/db' ,async (c) => {
+  return c.json({ users: []});
+})
+app.post('/db/addUser', async (c) => {
+  const SUPABASE_URL = (c.env as { SUPABASE_URL: string }).SUPABASE_URL;
+  const SUPABASE_API_KEY = (c.env as { SUPABASE_API_KEY: string }).SUPABASE_API_KEY;
+  const { name } = await c.req.json();
+  const result = await addUser(SUPABASE_URL, SUPABASE_API_KEY, name);
+  return c.json({ result: result});
+})
 export default app
 
 
@@ -47,6 +57,26 @@ async function fetchUserNames(SUPABASE_URL: string, SUPABASE_API_KEY: string){
     }
 
     return data.map(user => user.names);
+  } catch (error) {
+    console.error('Error fetching user names:', error);
+    return 'エラーが発生しました';
+  }
+}
+
+async function addUser(SUPABASE_URL: string, SUPABASE_API_KEY: string,name:String){
+  const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
+  
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .insert({id: 12, names: name})
+
+    if (error) {
+      console.error('Supabase error:', error);
+      throw error;
+    }
+
+    return '成功しました';
   } catch (error) {
     console.error('Error fetching user names:', error);
     return [];
