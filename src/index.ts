@@ -41,7 +41,7 @@ app.post('/db/addUser', async (c) => {
   return c.json({ result: result});
 })
 
-app.get('/db/deleteUser' ,async (c) => {
+app.post('/db/deleteUser' ,async (c) => {
   const SUPABASE_URL = (c.env as { SUPABASE_URL: string }).SUPABASE_URL;
   const SUPABASE_API_KEY = (c.env as { SUPABASE_API_KEY: string }).SUPABASE_API_KEY;
   const { name } = await c.req.json();
