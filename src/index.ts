@@ -69,7 +69,7 @@ async function addUser(SUPABASE_URL: string, SUPABASE_API_KEY: string,name:Strin
   try {
     const { data, error } = await supabase
       .from('users')
-      .insert({id: 12, names: name})
+      .insert({ names: name})
 
     if (error) {
       console.error('Supabase error:', error);
