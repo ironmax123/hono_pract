@@ -48,6 +48,14 @@ app.post('/db/deleteUser' ,async (c) => {
   const result = await deleteUser(SUPABASE_URL, SUPABASE_API_KEY, name);
   return c.json({ result: result});
 })
+
+app.post('/db/updateUser' ,async (c) => {
+  const SUPABASE_URL = (c.env as { SUPABASE_URL: string }).SUPABASE_URL;
+  const SUPABASE_API_KEY = (c.env as { SUPABASE_API_KEY: string }).SUPABASE_API_KEY;
+  const { name } = await c.req.json();
+  const result = await updateUser(SUPABASE_URL, SUPABASE_API_KEY, name);
+  return c.json({ result: result});
+})
 export default app
 
 
@@ -99,6 +107,26 @@ async function deleteUser(SUPABASE_URL: string, SUPABASE_API_KEY: string,name:St
       .from('users')
       .delete()
       .eq('names', name)
+
+    if (error) {
+      console.error('Supabase error:', error);
+      throw error;
+    }
+
+    return '成功しました';
+  } catch (error) {
+    console.error('Error fetching user names:', error);
+    return [];
+  }
+}
+
+async function updateUser(SUPABASE_URL: string, SUPABASE_API_KEY: string,name:String){
+  const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
+  
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .update({ names: name })
 
     if (error) {
       console.error('Supabase error:', error);
